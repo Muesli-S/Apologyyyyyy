@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>I'm Sorry, Sakii ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+
+
+
+  <style>
+    @font-face {
+      font-family: Precious;
+      src: url(Precious.ttf);
+    }
+    body {
+  margin: 0;
+  background-color: #ffe6ec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+    .heart {
+      position: fixed;
+      width: 15px;
+      height: 15px;
+      background: red;
+      transform: rotate(45deg);
+      animation: float 10s linear infinite;
+    }
+
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .heart::before { top: -7.5px; left: 0; }
+    .heart::after { left: -7.5px; top: 0; }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+      100% { transform: translateY(-1000px) rotate(45deg); opacity: 0; }
+    }
+
+    .container {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #ff4f81;
+    }
+
+    p {
+      font-size: 1.3em;
+      color: #444;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
+    button {
+      padding: 14px 30px;
+      background-color: #ff4f81;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      margin: 20px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #e8436f;
+    }
+
+    #slideshow {
+      display: none;
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    .slide {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadein 1s ease-in-out;
+    }
+
+    .photo-wrapper {
+      border: 5px dashed #ff4f81;
+      padding: 10px;
+      border-radius: 30px;
+      background: white;
+      position: relative;
+      box-shadow: 0 0 10px rgba(255, 79, 129, 0.4);
+    }
+
+    .slide img {
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 20px;
+    }
+
+    .reason {
+      margin-top: 25px;
+      font-family: 'Shadows Into Light', cursive;
+      font-size: 1.6em;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    
+    .canvas-wrapper {
+      position: relative;
+      width: 90vw;
+      height: 90vh;
+      margin: auto;
+      overflow: hidden;
+    }
+
+    .canvas-wrapper::after {
+      content: "";
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      background: url('https://i.imgur.com/LU8zA2v.png') no-repeat center/cover;
+      pointer-events: none;
+      z-index: 3;
+    }
+.canvas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(260px, auto);
+  gap: 20px;
+  padding: 30px;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+  background-color: #f5e2c8;
+  background-image: url('https://i.imgur.com/fp8KyzZ.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+
+
+    .canvas-texture-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("crinkled-cardboard-texture.jpg") center/cover no-repeat;
+      opacity: 0.3;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+  /* Torn-paper background under each canvas photo */
+.canvas .photo-wrapper {
+  position: relative;
+  width: 240px;     /* changed */
+  height: 240px;    /* changed */
+  background-color: #e2c8a2;
+  background-image: url("images/torn-paper.webp");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+  margin: 10px;
+}
+
+.canvas .photo-wrapper img {
+  width: 240px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  position: relative;
+  z-index: 1;
+}
+
+
+.canvas-crayon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  opacity: 0.5;
+  z-index: 0;
+  pointer-events: none;
+
+  filter: contrast(5) saturate(6) blur(0.3px);
+}
+
+.memory-item {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  opacity: 0;
+  transition: transform 3s ease, opacity 1s ease;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.memory-item img,
+.memory-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(22, 1fr);
+grid-template-rows: repeat(10, 1fr);
+gap: 8px;
+
+  gap: 4px;
+  width: 90vw;
+  height: 90vh;
+}
+
+.cell {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.cell.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.cell img,
+.cell video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.final-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1.6);
+  opacity: 0;
+  font-size: 3em;
+  font-family: 'Satisfy', serif;
+
+ color: #b03a5b;
+ background: rgba(255, 255, 255, 0.7); /* Light blur */
+  padding: 20px 40px;
+  border-radius: 20px;
+
+
+  z-index: 99;
+  white-space: nowrap;
+  transition: opacity 0.8s ease, transform 3s ease;
+}
+
+.scroll-message {
+  background-image: url('crinkled-cardboard-texture.jpg'); /* crumpled texture */
+  background-size: cover;
+  background-position: center;
+  background-attachment: local;
+  position: relative;
+  width: 40vw;
+  height: 300px; /* Add this line to constrain height */
+  overflow-y: scroll;
+  scrollbar-width: none;   
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.2), 0 4px 10px rgba(0,0,0,0.1);
+  font-family: Satisfy;
+  font-size: 1.5em;
+  color: #333;
+  line-height: 1.6;
+  position: relative;
+  z-index: 2;
+}
+
+.scroll-message::before,
+.scroll-message::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 30px;
+  left: 0;
+  z-index: -1;
+}
+
+.scroll-message::before {
+  top: -15px;
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
+}
+
+.scroll-message::after {
+  bottom: -15px;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+}
+
+.scroll-text {
+  text-align: justify;
+}
+
+
+.lyric {
+  font-family: 'Great Vibes', cursive;
+  font-size: 1.6em;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 8px 20px;
+  border-radius: 15px;
+  color: #a12d4f;
+  text-align: center;
+  max-width: 280px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+}
+
+.scrap-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 10;
+  transform-origin: center;
+}
+
+
+.scrap-item .lyric {
+  margin-top: 8px;
+  font-size: 1.4em;
+  text-align: center;
+  color: #b03a5b;
+  background: rgba(255,255,255,0.8);
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-family: 'Great Vibes', cursive;
+}
+
+
+
+@keyframes fadeInLyric {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+
+@media (max-width: 420px) {
+  .canvas-wrapper {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+  }
+
+  .canvas {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-auto-rows: minmax(180px, auto) !important;
+    gap: 10px !important;
+    padding: 10px !important;
+    background-position: top center;
+  }
+
+  .canvas .photo-wrapper {
+    width: 160px !important;
+    height: 160px !important;
+    margin: 5px;
+  }
+
+  .canvas .photo-wrapper img {
+    width: 160px !important;
+    height: 160px !important;
+  }
+
+  .scrap-item {
+    width: 160px !important;
+    pointer-events: auto;
+    transform-origin: center;
+  }
+
+  .scrap-item .lyric {
+    font-size: 1.2em !important;
+    max-width: 160px !important;
+    padding: 6px 10px !important;
+  }
+
+  .canvas-crayon {
+    width: 12px;
+    height: 12px;
+  }
+}
+@media (max-width: 480px) {
+  .final-message {
+    font-size: 1.4em;
+    padding: 10px 15px;
+    max-width: 110vw;
+    white-space: normal;
+    line-height: 1.4;
+  }
+
+  .memory-item {
+    transform: scale(0.6) translateY(-150px) !important;
+  }
+}
+
+
+
+  </style>
+</head>
+<body>
+  <script>
+    for(let i = 0; i < 30; i++) {
+      let heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.top = Math.random() * 100 + "vh";
+      heart.style.animationDuration = (5 + Math.random() * 5) + "s";
+      document.body.appendChild(heart);
+    }
+  </script>
+
+  <audio id="loveSong" preload="auto">
+    <source src="Passenger  Let Her Go (Official Video).mp3" type="audio/mp3">
+  </audio>
+
+  <div id="mainContent" class="container">
+    <h1>I'm Sorry, Sakii ❤️</h1>
+    <p>I messed up, and I know it. Please hear me out...</p>
+    <div class="scroll-message">
+  <div class="scroll-text">
+    My dearest Sakii, <br><br>
+    I don’t expect things to be okay instantly. I just want to say I’m truly sorry from the deepest part of my heart. 
+    I’ll never stop loving you, and I’ll always try to be better. Please read this and know that I mean every word. 
+    I know what I did to you last night was ekdum horrible, I fell asleep mid convo and a serious convo at that. I did not sleep intentionally
+    as you know that very well, I was just waiting for your text, and then when I woke up and saw your texts, my heart did a very big '!!!!'
+    I regretted that sooooo muucccchh, it hurt me kitnaa zyaada but ik it hurt you more, I am lacking in many different things and I want to 
+    reallyyy improve so badd trust mee, I want to give you the best there is. But for now, I have this for you, to apologize for my deeds and
+    hopefully to make you happy with me again. I hope you will like it cutie. I loveeeee youuuu sooooo muccchhhhhh. I am really realllyyy
+    sorrrrryyyyy my babyygirlll ❤️❤️
+  </div>
+</div>
+
+    <button onclick="startSlideshow()">Why I Love You 💖</button>
+  </div>
+
+  <div id="slideshow" class="container"></div>
+<div id="montage" style="display: none; position: relative; width: 100vw; height: 100vh; overflow: hidden; background-color: #ffe6ec;"></div>
+
+  <script>
+    const slideshowSlides = [
+      { img: "Photos/pic19.jpg", reason: "You smile and my whole world lights up." },
+      { img: "Photos/pic56.jpg", reason: "You're my peace in a storm." },
+      { img: "Photos/pic26.jpg", reason: "You're not just my love, you're my best friend." },
+      { img: "Photos/pic38.jpg", reason: "Even in silence, you make me feel understood." }
+    ];
+
+    const canvasSlides = [
+      { img: "Photos/pic3.jpg", reason: "You're my forever home." },
+      { img: "Photos/pic7.jpg", reason: "Every memory with you is priceless." },
+      { img: "Photos/pic8.jpg", reason: "You're the sweetest part of my day." },
+      { img: "Photos/pic14.jpg", reason: "Even your flaws are perfect to me." }
+    ];
+
+
+const slideshowLyrics = [
+  { time: 26, text: "Well you only need the light when it's burning low" },
+  { time: 29, text: "Only miss the sun when it starts to snow" },
+  { time: 33, text: "Only know you love her when you let her go" },
+  { time: 39, text: "Only know you’ve been high when you're feeling low" }
+];
+
+// Scrapbook lyrics (4 lines)
+const scrapbookLyrics = [
+  { time: 28, text: "Only know you’ve been high when you're feeling low" },
+  { time: 42, text: "Only hate the road when you're missing home" },
+  { time: 45, text: "Only know you love her when you let her go" },
+  { time: 51, text: "And you let her go" },
+];
+
+
+
+
+
+function syncSlidesWithAudio(audio) {
+  let slideIndex = 0;
+  let scrapIndex = 0;
+
+  const interval = setInterval(() => {
+    const t = audio.currentTime;
+
+    if (slideIndex < slideshowLyrics.length && t >= slideshowLyrics[slideIndex].time) {
+      showSlide(slideIndex);
+      slideIndex++;
+
+      if (slideIndex === slideshowLyrics.length) {
+    showScrapbook();
+      }
+    }
+
+
+    else if (slideIndex >= slideshowLyrics.length && scrapIndex >= scrapbookLyrics.length) {
+      clearInterval(interval);
+      // Optionally trigger next phase...
+    }
+  }, 300);
+}
+
+
+    let currentIndex = 0;
+
+ function startSlideshow() {
+  document.getElementById("mainContent").style.display = "none";
+  const slideshow = document.getElementById("slideshow");
+  slideshow.style.display = "flex";
+
+  // Play the song when slideshow starts
+  const audio = document.getElementById("loveSong");
+   audio.currentTime = 26
+  audio.play();
+
+  syncSlidesWithAudio(audio);
+}
+
+
+    function showSlide(index) {
+      const slideshow = document.getElementById("slideshow");
+      slideshow.innerHTML = "";
+
+      if (index < slideshowSlides.length) {
+        const slideData = slideshowSlides[index];
+        const slide = document.createElement("div");
+        slide.className = "slide";
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "photo-wrapper";
+
+        const img = document.createElement("img");
+        img.src = slideData.img;
+        wrapper.appendChild(img);
+
+
+
+        slide.appendChild(wrapper);
+        const lyric = document.createElement("div");
+lyric.className = "lyric";
+lyric.textContent = slideshowLyrics[index].text; // You'll define `slideshowLyrics` with the 4 lines
+slide.appendChild(lyric);
+        slideshow.appendChild(slide);
+
+        currentIndex++;
+      } else {
+        showScrapbook();
+      }
+    }
+
+function showScrapbook() {
+  const slideshow = document.getElementById("slideshow");
+  slideshow.innerHTML = "";
+  slideshow.style.display = "block";
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "canvas-wrapper";
+
+  // Create the grid-based canvas
+  let canvas = document.createElement("div");
+  canvas.className = "canvas";
+const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+if (vw <= 420) {
+  canvas.style.gridTemplateColumns = "repeat(2, 1fr)";
+  canvas.style.gridAutoRows = "minmax(180px, auto)";
+  canvas.style.gap = "10px";
+  canvas.style.padding = "10px";
+}
+  const overlay = document.createElement("div");
+  overlay.className = "canvas-texture-overlay";
+
+  wrapper.appendChild(canvas);
+  wrapper.appendChild(overlay);
+  slideshow.appendChild(wrapper);
+
+  // Decorative crayon stickers
+  const crayonImages = ["images/heart.png", "images/star.png", "images/sparkle.png", "images/ribbon.png"];
+  for (let i = 0; i < 50; i++) {
+    const deco = document.createElement("img");
+    deco.src = crayonImages[Math.floor(Math.random() * crayonImages.length)];
+    deco.className = "canvas-crayon";
+    deco.style.left = `${Math.random() * 95}%`;
+    deco.style.top = `${Math.random() * 95}%`;
+    canvas.appendChild(deco);
+  }
+
+  const audio = document.querySelector("audio");
+  let lyricIndex = 0;
+
+  const interval = setInterval(() => {
+    if (lyricIndex >= scrapbookLyrics.length) {
+      clearInterval(interval);
+      setTimeout(() => {
+        startMontage();
+      }, 2000);
+      return;
+    }
+
+    const lyricData = scrapbookLyrics[lyricIndex];
+    const slide = canvasSlides[lyricIndex];
+
+    if (audio.currentTime >= lyricData.time) {
+      const item = document.createElement("div");
+      item.className = "scrap-item";
+      item.style.opacity = 0;
+      item.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
+
+      // Randomly span 1 or 2 rows for variable height
+      const rowSpan = Math.random() > 0.6 ? 2 : 1;
+      item.style.gridRow = `span ${rowSpan}`;
+
+      const imgWrap = document.createElement("div");
+      imgWrap.className = "photo-wrapper";
+
+      const img = document.createElement("img");
+      img.src = slide.img;
+      imgWrap.appendChild(img);
+
+      const lyric = document.createElement("div");
+      lyric.className = "lyric";
+      lyric.textContent = lyricData.text;
+
+      item.appendChild(imgWrap);
+      item.appendChild(lyric);
+      canvas.appendChild(item);
+
+      // Fade in
+      setTimeout(() => {
+        item.style.opacity = 1;
+      }, 100);
+
+      lyricIndex++;
+    }
+  }, 500);
+}
+
+
+
+
+    function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function startMontage() {
+  document.getElementById("slideshow").style.display = "none";
+  const montage = document.getElementById("montage");
+  montage.innerHTML = "";
+  montage.style.display = "block";
+
+  const mediaItems = [];
+
+  for (let i = 1; i <= 57; i++) {
+    mediaItems.push({ type: 'img', src: `Photos/pic${i}.jpg` });
+  }
+
+  for (let i = 1; i <= 13; i++) {
+    mediaItems.push({ type: 'video', src: `Videos/vid${i}.mp4` });
+  }
+
+  const shuffledItems = shuffleArray(mediaItems);
+
+  const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+  let cols, rows, itemSize, verticalOffset;
+
+  if (vw <= 480) {
+    cols = 4;
+    rows = 18;
+    itemSize = 70;
+    verticalOffset = 3;
+  } else if (vw <= 768) {
+    cols = 6;
+    rows = 10;
+    itemSize = 100;
+    verticalOffset = 5;
+  } else {
+    cols = 10;
+    rows = 7;
+    itemSize = 180;
+    verticalOffset = 9.7;
+  }
+
+  const cellWidth = 100 / cols;
+  const cellHeight = 100 / rows;
+
+  const gridPositions = [];
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      gridPositions.push({ x: x * cellWidth, y: y * cellHeight });
+    }
+  }
+
+  const shuffledGrid = shuffleArray(gridPositions);
+
+  shuffledItems.forEach((item, i) => {
+    if (i >= shuffledGrid.length) return;
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "memory-item";
+    wrapper.style.left = `${shuffledGrid[i].x}vw`;
+    wrapper.style.top = `calc(${shuffledGrid[i].y}vh + ${verticalOffset}vh)`;
+    wrapper.style.width = `${itemSize}px`;
+    wrapper.style.height = `${itemSize}px`;
+
+    if (item.type === 'img') {
+      const img = document.createElement("img");
+      img.src = item.src;
+      wrapper.appendChild(img);
+    } else {
+      const video = document.createElement("video");
+      video.src = item.src;
+      video.autoplay = true;
+      video.muted = true;
+      video.loop = true;
+      wrapper.appendChild(video);
+    }
+
+    montage.appendChild(wrapper);
+
+    setTimeout(() => {
+      wrapper.style.opacity = 1;
+      wrapper.style.transform = `scale(${vw <= 480 ? 0.6 : 0.54}) translateY(-200px)`;
+    }, i * 300);
+  });
+
+  // Final message after items appear
+  setTimeout(() => {
+    const finalMessage = document.createElement("div");
+    finalMessage.className = "final-message";
+    finalMessage.textContent = "❤️ And no matter what, I’ll always love you, my baby. ❤️";
+    montage.appendChild(finalMessage);
+
+    setTimeout(() => {
+      finalMessage.style.opacity = 1;
+      finalMessage.style.transform = "translate(-50%, -60%) scale(0.8)";
+    }, 100);
+  }, shuffledItems.length * 300 + 1000);
+}
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>
